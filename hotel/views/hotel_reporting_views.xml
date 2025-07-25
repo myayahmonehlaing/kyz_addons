@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Search View FIRST (MUST COME BEFORE ACTION!) -->
+    <record id="view_hotel_reservation_line_search" model="ir.ui.view">
+        <field name="name">hotel.reservation.line.search</field>
+        <field name="model">hotel.reservation.line</field>
+        <field name="arch" type="xml">
+            <search string="Reservation Search">
+                <field name="partner_id"/>
+                <field name="room_id"/>
+                <field name="checkin_date"/>
+                <field name="checkout_date"/>
+                <field name="reservation_status"/>
+                <filter name="group_by_room" string="Group by Room" context="{'group_by': 'room_id'}"/>
+                <filter name="group_by_partner" string="Group by Customer" context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hotel_reservation_line_report" model="ir.actions.act_window">
+        <field name="name">Reservation Report</field>
+        <field name="res_model">hotel.reservation.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="view_hotel_reservation_line_search"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="view_hotel_reservation_line_pivot" model="ir.ui.view">
+        <field name="name">hotel.reservation.line.pivot</field>
+        <field name="model">hotel.reservation.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Reservation Analysis">
+                <field name="price_total" type="measure"/>
+                <field name="duration" type="measure"/>
+                <field name="partner_id" type="row"/>
+                <field name="room_id" type="col"/>
+                <field name="category_id"/>
+                <field name="checkin_date"/>
+                <field name="reservation_status"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_hotel_reservation_line_graph" model="ir.ui.view">
+        <field name="name">hotel.reservation.line.graph</field>
+        <field name="model">hotel.reservation.line</field>
+        <field name="arch" type="xml">
+            <graph string="Reservation Statistics" type="bar">
+                <field name="price_total" type="measure"/>
+                <field name="duration" type="measure"/>
+                <field name="partner_id"/>
+                <field name="room_id"/>
+                <field name="reservation_status"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- List View (read-only) -->
+    <record id="view_hotel_reservation_line_list_report" model="ir.ui.view">
+        <field name="name">hotel.reservation.line.report.list</field>
+        <field name="model">hotel.reservation.line</field>
+        <field name="arch" type="xml">
+            <list string="Reservation Lines" create="false" edit="false">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="room_id"/>
+                <field name="category_id"/>
+                <field name="checkin_date"/>
+                <field name="checkout_date"/>
+                <field name="duration"/>
+                <field name="price_total"/>
+                <field name="reservation_status"/>
+            </list>
+        </field>
+    </record>
+    
+</odoo>

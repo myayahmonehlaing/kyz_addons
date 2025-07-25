@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main App Menu -->
+    <menuitem
+            id="menu_hotel_management_root"
+            name="Hotel"
+            web_icon="hotel,static/description/icon.png"
+            sequence="1"/>
+
+
+    <!-- ================== -->
+    <!-- Dashboard Menu   -->
+    <!-- ================== -->
+    <menuitem
+            id="menu_hotel_dashboard_main"
+            name="Dashboard"
+            parent="menu_hotel_management_root"
+            sequence="10">
+
+        <menuitem
+                id="menu_hotel_dashboard_gantt"
+                name="Dashboard View"
+                action="action_hotel_reservation_line_gantt"
+                sequence="10"/>
+
+<!--            <menuitem id="menu_hotel_reservation_grid"-->
+<!--              name="Room Grid View"-->
+<!--              action="action_room_reservation_grid"-->
+<!--              sequence="20"/>-->
+    </menuitem>
+
+
+    <!-- ================== -->
+    <!-- Reservation Menu   -->
+    <!-- ================== -->
+
+    <menuitem
+            id="menu_hotel_reservation_main"
+            name="Reservation"
+            parent="menu_hotel_management_root"
+            sequence="20">
+
+
+        <menuitem
+                id="menu_hotel_reservation"
+                name="Reservations"
+                action="action_hotel_reservation"
+                sequence="10"/>
+
+        <menuitem
+                id="menu_hotel_customer"
+                name="Customers"
+                action="base.action_partner_form"
+                sequence="20"/>
+    </menuitem>
+
+    <!-- ================== -->
+    <!-- Invoice Menu       -->
+    <!-- ================== -->
+    <menuitem
+            id="menu_hotel_invoice_main"
+            name="Invoicing"
+            parent="menu_hotel_management_root"
+            sequence="20">
+
+        <menuitem
+                id="menu_hotel_invoice"
+                name="Invoices"
+                action="action_reservation_invoices"
+                sequence="10"/>
+
+        <menuitem
+                id="menu_hotel_payment"
+                name="Payments"
+                action="action_reservation_payments"
+                sequence="20"/>
+    </menuitem>
+
+
+    <!-- ================== -->
+    <!-- Configuration Menu -->
+    <!-- ================== -->
+
+        <menuitem
+            id="menu_hotel_reporting_main"
+            name="Reporting"
+            parent="menu_hotel_management_root"
+            sequence="30">
+
+    <menuitem id="menu_hotel_reservation_line_report"
+              name="Reservation Report"
+              action="action_hotel_reservation_line_report"
+              sequence="10"/>
+
+
+        </menuitem>
+
+    <!-- ================== -->
+    <!-- Configuration Menu -->
+    <!-- ================== -->
+    <menuitem
+            id="menu_hotel_configuration_main"
+            name="Configuration"
+            parent="menu_hotel_management_root"
+            sequence="40">
+        <menuitem
+                id="menu_hotel_config_label_room_config"
+                name="Room Configuration"
+                sequence="10">
+            <menuitem
+                    id="menu_hotel_building"
+                    name="Building"
+                    action="action_hotel_building"
+                    sequence="10"/>
+
+<!--            <menuitem-->
+<!--                    id="menu_hotel_floor"-->
+<!--                    name="Floor"-->
+<!--                    action="action_hotel_floor"-->
+<!--                    sequence="20"/>-->
+
+            <menuitem
+                    id="menu_hotel_room_type"
+                    name="Room Types"
+                    action="action_hotel_room_type"
+                    sequence="30"/>
+
+
+            <menuitem
+                    id="menu_hotel_room"
+                    name="Rooms"
+                    action="action_hotel_room"
+                    sequence="40"/>
+
+        </menuitem>
+
+
+        <menuitem
+                id="menu_hotel_config_label_amenity_config"
+                name="Amenity Configuration"
+                sequence="20">
+
+            <menuitem id="menu_hotel_amenity_type"
+                      name="Amenity Types"
+                      action="action_hotel_amenity_type"
+                      sequence="10"/>
+
+            <menuitem id="menu_hotel_amenity"
+                      name="Amenities"
+                      action="action_hotel_amenity"
+                      sequence="20"/>
+
+        </menuitem>
+
+
+        <menuitem
+                id="menu_hotel_config_label_service_config"
+                name="Extra Service Configuration"
+                sequence="30">
+
+            <menuitem
+                    id="menu_hotel_service_type_list"
+                    name="Service Categories"
+                    action="action_hotel_service_type"
+                    sequence="10"/>
+
+            <menuitem
+                    id="menu_hotel_service_list"
+                    name="Extra Services"
+                    action="action_hotel_service"
+                    sequence="20"/>
+
+
+        </menuitem>
+
+
+    </menuitem>
+
+
+</odoo>

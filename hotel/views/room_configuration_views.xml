@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Building Views -->
+    <record id="view_hotel_building_list" model="ir.ui.view">
+        <field name="name">hotel.building.list</field>
+        <field name="model">hotel.building</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_hotel_building_form" model="ir.ui.view">
+        <field name="name">hotel.building.form</field>
+        <field name="model">hotel.building</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="address"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <notebook>
+                        <page string="Floors">
+                            <field name="floor_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+<!--                                    <field name="company_id"/>-->
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_hotel_building" model="ir.actions.act_window">
+        <field name="name">Buildings</field>
+        <field name="res_model">hotel.building</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Floor Views -->
+    <record id="view_hotel_floor_list" model="ir.ui.view">
+        <field name="name">hotel.floor.list</field>
+        <field name="model">hotel.floor</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="building_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_hotel_floor_form" model="ir.ui.view">
+        <field name="name">hotel.floor.form</field>
+        <field name="model">hotel.floor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="building_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_hotel_floor" model="ir.actions.act_window">
+        <field name="name">Floors</field>
+        <field name="res_model">hotel.floor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Room Type Views -->
+    <record id="view_hotel_room_type_list" model="ir.ui.view">
+        <field name="name">hotel.room.type.list</field>
+        <field name="model">hotel.room.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_hotel_room_type_form" model="ir.ui.view">
+        <field name="name">hotel.room.type.form</field>
+        <field name="model">hotel.room.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_hotel_room_type" model="ir.actions.act_window">
+        <field name="name">Room Types</field>
+        <field name="res_model">hotel.room.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Room Views (Updated) -->
+    <!-- Room List View (Updated) -->
+    <record id="view_hotel_room_list" model="ir.ui.view">
+        <field name="name">hotel.room.list</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <list string="Hotel Rooms">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="floor_id"/>
+                <field name="list_price"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Room Form View (Updated) -->
+    <record id="view_hotel_room_form" model="ir.ui.view">
+        <field name="name">hotel.room.form</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <!--            <form string="Hotel Room">-->
+            <!--&lt;!&ndash;                <header>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    <field name="state" widget="statusbar" statusbar_visible="available,occupied"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;                </header>&ndash;&gt;-->
+            <!--                <sheet>-->
+            <!--                    <div class="oe_title">-->
+            <!--                        <h1>-->
+            <!--                            <field name="name"/>-->
+            <!--                        </h1>-->
+            <!--                    </div>-->
+            <!--                    <group>-->
+            <!--                        <group>-->
+            <!--                            <field name="category_id"/>-->
+            <!--                            <field name="state"/>-->
+
+            <!--                            <field name="building_id"/>-->
+            <!--                            <field name="floor_id" domain="[('building_id', '=', building_id)]"/>-->
+            <!--                            <field name="product_id"/>-->
+            <!--                        </group>-->
+            <!--                        <group>-->
+            <!--                            <field name="price"/>-->
+            <!--                            <field name="capacity"/>-->
+            <!--                            <field name="company_id" groups="base.group_multi_company"/>-->
+            <!--                        </group>-->
+            <!--                    </group>-->
+            <!--                    <notebook>-->
+            <!--                        <page string="Description">-->
+            <!--                            <field name="description"/>-->
+            <!--                        </page>-->
+            <!--                    </notebook>-->
+            <!--                </sheet>-->
+            <!--            </form>-->
+            <form string="Hotel Room">
+                <sheet>
+                    <div class="oe_title">
+                        <!-- 'name' comes from the inherited product model -->
+                        <h1>
+                            <field name="name" placeholder="e.g. Room 101, Deluxe Suite"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <!-- Fields from our hotel.room model -->
+                            <field name="category_id"/>
+                            <field name="building_id"/>
+                            <field name="floor_id" domain="[('building_id', '=', building_id)]"/>
+                            <field name="capacity"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <!-- Fields from the INHERITED product.product model! -->
+                            <field name="list_price" string="Price"/> <!-- This is now our price field -->
+                            <field name="taxes_id" widget="many2many_tags"/> <!-- We can add taxes! -->
+                            <field name="default_code" string="Internal Reference"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Room Description..."/>
+                        <field name="product_id" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Amenities">
+                            <field name="amenity_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="amenity_type_id"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Reservations">
+                            <field name="reservation_line_ids">
+                                <list>
+                                    <field name="reservation_id"/>
+                                    <field name="checkin_date"/>
+                                    <field name="checkout_date"/>
+                                    <field name="reservation_status"/>
+                                    <field name="unit_price"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    <record id="action_hotel_room" model="ir.actions.act_window">
+        <field name="name">Rooms</field>
+        <field name="res_model">hotel.room</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!--   ###################### Amenities ###########################-->
+    <record id="action_hotel_amenity" model="ir.actions.act_window">
+        <field name="name">Amenities</field>
+        <field name="res_model">hotel.amenity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_amenity_form" model="ir.ui.view">
+        <field name="name">hotel.amenity.form</field>
+        <field name="model">hotel.amenity</field>
+        <field name="arch" type="xml">
+            <form string="Amenity">
+                <sheet>
+
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. High Speed Wifi"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="amenity_type_id"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amenity_list" model="ir.ui.view">
+        <field name="name">hotel.amenity.list</field>
+        <field name="model">hotel.amenity</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="amenity_type_id"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!--   ###################### Amenity Types ###########################-->
+    <record id="action_hotel_amenity_type" model="ir.actions.act_window">
+        <field name="name">Amenity Types</field>
+        <field name="res_model">hotel.amenity.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_amenity_type_form" model="ir.ui.view">
+        <field name="name">hotel.amenity.type.form</field>
+        <field name="model">hotel.amenity.type</field>
+        <field name="arch" type="xml">
+            <form string="Amenity Type">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Food"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="description"/>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amenity_type_list" model="ir.ui.view">
+        <field name="name">hotel.amenity.type.list</field>
+        <field name="model">hotel.amenity.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+
+</odoo>

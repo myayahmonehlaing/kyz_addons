@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_hotel_reservation_document">
+<t t-call="web.external_layout">
+    <main>
+        <t t-foreach="docs" t-as="doc">
+            <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+
+            <div class="page">
+                <h2>Reservation # <span t-field="doc.name"/></h2>
+
+                <div class="row mb-4">
+                    <div class="col">
+                        <strong>Guest</strong>
+                        <div t-field="doc.partner_id"/>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col">
+                        <strong>Room(s)</strong>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Room</th>
+                                    <th>Category</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th class="text-end">Tax</th>
+                                    <th class="text-end">Price Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.room_line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.room_id"/></td>
+                                        <td><span t-field="line.category_id"/></td>
+                                        <td><span t-field="line.checkin_date"/></td>
+                                        <td><span t-field="line.checkout_date"/></td>
+                                        <td class="text-end"><span t-field="line.price_tax"/></td>
+                                        <td class="text-end"><span t-field="line.price_total"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <t t-if="doc.service_line_ids">
+                    <div class="row mt-3">
+                        <div class="col">
+                            <strong>Service(s)</strong>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Service</th>
+                                        <th>Qty</th>
+                                        <th>Unit Price</th>
+                                                <th class="text-end">Tax</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.service_line_ids" t-as="service">
+                                        <tr>
+                                            <td><span t-field="service.service_id"/></td>
+                                            <td><span t-field="service.quantity"/></td>
+                                            <td><span t-field="service.price_unit"/></td>
+                                            <td class="text-end"><span t-field="service.tax_amount"/></td>
+                                            <td><span t-field="service.subtotal"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+
+                <div class="row mt-3">
+                    <div class="col-6 offset-6 text-end">
+                        <strong>Total:</strong>
+                        <span t-field="doc.total_amount" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </main>
+</t>
+    </template>
+
+    <report
+        id="action_report_hotel_reservation"
+        model="hotel.reservation"
+        string="Reservation Report"
+        report_type="qweb-pdf"
+        name="hotel.report_hotel_reservation_document"
+        file="hotel.report_hotel_reservation_document"
+        print_report_name="'Reservation - %s' % (object.name)"
+    />
+
+    <record id="action_report_hotel_reservation_binding" model="ir.actions.report">
+        <field name="name">Print Reservation</field>
+        <field name="model">hotel.reservation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hotel.report_hotel_reservation_document</field>
+        <field name="binding_model_id" ref="model_hotel_reservation"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Reservation - %s' % (object.name)</field>
+    </record>
+</odoo>

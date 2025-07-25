@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action for Service Types -->
+    <record id="action_hotel_service_type" model="ir.actions.act_window">
+        <field name="name">Service Types</field>
+        <field name="res_model">hotel.service.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Form and list views for Service Types -->
+    <record id="view_hotel_service_type_form" model="ir.ui.view">
+        <field name="name">hotel.service.type.form</field>
+        <field name="model">hotel.service.type</field>
+        <field name="arch" type="xml">
+            <form string="Service Type">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_hotel_service_type_list" model="ir.ui.view">
+        <field name="name">hotel.service.type.list</field>
+        <field name="model">hotel.service.type</field>
+        <field name="arch" type="xml">
+            <list string="Service Types">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action for Hotel Services -->
+    <record id="action_hotel_service" model="ir.actions.act_window">
+        <field name="name">Hotel Services</field>
+        <field name="res_model">hotel.service</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define a new hotel service or product.
+            </p>
+        </field>
+    </record>
+
+    <!-- Form View for Hotel Service -->
+    <record id="view_hotel_service_form" model="ir.ui.view">
+        <field name="name">hotel.service.form</field>
+        <field name="model">hotel.service</field>
+        <field name="arch" type="xml">
+            <form string="Hotel Service">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Airport Transfer"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="service_type_id"/>
+                            <field name="list_price"/>
+                            <field name="taxes_id" widget="many2many_tags"/> <!-- We can add taxes! -->
+
+                        </group>
+                        <group>
+                            <!-- 'type' is inherited from product.product -->
+                            <field name="type"
+                                   help="A 'Service' is non-material. A 'Consumable' is a physical product where you don't manage stock (e.g. minibar coke)."/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- list View for Hotel Service -->
+    <record id="view_hotel_service_list" model="ir.ui.view">
+        <field name="name">hotel.service.list</field>
+        <field name="model">hotel.service</field>
+        <field name="arch" type="xml">
+            <list string="Hotel Services">
+                <field name="name"/>
+                <field name="service_type_id" required="True"/>
+                <field name="list_price"/>
+                <field name="type"/>
+            </list>
+        </field>
+    </record>
+</odoo>
+

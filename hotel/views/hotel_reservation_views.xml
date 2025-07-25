@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action Window -->
+    <record id="action_hotel_reservation" model="ir.actions.act_window">
+        <field name="name">Reservations</field>
+        <field name="res_model">hotel.reservation</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new hotel reservation!
+            </p>
+        </field>
+    </record>
+
+    <!-- list View (List) -->
+    <record id="view_hotel_reservation_list" model="ir.ui.view">
+        <field name="name">hotel.reservation.list</field>
+        <field name="model">hotel.reservation</field>
+        <field name="arch" type="xml">
+            <list string="Reservations" decoration-info="status == 'draft'" decoration-success="status == 'invoiced'"
+                  decoration-primary="status == 'invoiced'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="reservation_date" string="Date"/>
+                <field name="total_amount" string="Total"/>
+                <field name="status" widget="badge" decoration-success="status == 'confirmed' or status == 'invoiced'"
+                       decoration-info="status == 'draft'" decoration-danger="status == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_hotel_reservation_form" model="ir.ui.view">
+        <field name="name">hotel.reservation.form</field>
+        <field name="model">hotel.reservation</field>
+        <field name="arch" type="xml">
+            <form string="Reservation">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"
+                            invisible="status != 'draft'"/>
+                    <button name="action_create_invoice" string="Create Invoice" type="object" class="btn-primary"
+                            invisible="(status != 'confirmed') or (invoice_count > 0)"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="status not in ['draft', 'confirmed']"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="status != 'cancelled'"/>
+
+                    <field name="status" widget="statusbar" statusbar_visible="draft,confirmed,invoiced"/>
+
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object" class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                invisible="invoice_count == 0">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+<!--                        <button name="%(hotel.action_reservation_payments)d"-->
+<!--                        type="action"-->
+<!--                        class="oe_stat_button"-->
+<!--                        icon="fa-money"-->
+<!--                                invisible="payment_count == 0">-->
+<!--                        <field name="payment_count" widget="statinfo" string="Payments"/>-->
+<!--                    </button>-->
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="status != 'draft'"/>
+                            <field name="reservation_date" readonly="status != 'draft'"/>
+
+
+                        </group>
+
+                    </group>
+                    <notebook>
+                        <page string="Rooms" name="room_lines">
+                            <field name="room_line_ids" readonly="status != 'draft'">
+                                <list editable="bottom">
+                                    <field name="room_id"/>
+                                    <field name="category_id"/>
+                                    <field name="checkin_date" required="1"/>
+                                    <field name="checkout_date" required="1"/>
+                                    <field name="duration" readonly="1"/>
+                                    <field name="unit_price"/>
+                                    <field name="room_taxes_id" widget="many2many_tags"/>
+                                    <field name="price_total"/>
+
+                                    <field name="currency_id" column_invisible="1"/>
+
+
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Extra Services" name="service_lines">
+                            <field name="service_line_ids" readonly="status != 'draft'">
+                                <list editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="service_taxes_id" widget="many2many_tags"/>
+
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="subtotal" sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+
+
+                    </notebook>
+
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="room_price" string="Room Price"/>
+                        <field name="service_total" string="Service Total"/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="total_amount"/>
+                        </div>
+                        <field name="total_amount" nolabel="1" class="oe_subtotal_footer_total"/>
+                    </group>
+
+                    <!--                    <group class="oe_subtotal_footer oe_right">-->
+                    <!--                        <field name="room_price" string="Room Price:"/>-->
+                    <!--                        <field name="service_total" string="Room Service Price:"/>-->
+                    <!--                        <div class="oe_subtotal_footer_separator oe_inline">-->
+                    <!--                            <label for="total_amount"/>-->
+                    <!--                        </div>-->
+                    <!--                        <field name="total_amount" nolabel="1" class="oe_subtotal_footer_total"/>-->
+                    <!--                    </group>-->
+                </sheet>
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+    <!--    &lt;!&ndash; Calendar View &ndash;&gt;-->
+    <!--    <record id="view_hotel_reservation_calendar" model="ir.ui.view">-->
+    <!--        <field name="name">hotel.reservation.calendar</field>-->
+    <!--        <field name="model">hotel.reservation</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <calendar string="Reservation Calendar"-->
+    <!--                      date_start="checkin_date"-->
+    <!--                      date_stop="checkout_date"-->
+    <!--                      color="room_id"-->
+    <!--                      mode="month">-->
+    <!--                <field name="partner_id"/>-->
+    <!--                <field name="room_id"/>-->
+    <!--            </calendar>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <!--    <record id="view_hotel_reservation_gantt" model="ir.ui.view">-->
+    <!--        <field name="name">hotel.reservation.gantt</field>-->
+    <!--        <field name="model">hotel.reservation</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <gantt string="Reservation Schedule"-->
+    <!--                   date_start="checkin_date"-->
+    <!--                   date_stop="checkout_date"-->
+    <!--                   default_group_by="room_id"-->
+    <!--                   color="status">-->
+    <!--                &lt;!&ndash; The fields below are displayed inside the Gantt bar's tooltip &ndash;&gt;-->
+    <!--                <field name="partner_id"/>-->
+    <!--                <field name="status"/>-->
+
+    <!--            </gantt>-->
+    <!--        </field>-->
+    <!--    </record>-->
+</odoo>

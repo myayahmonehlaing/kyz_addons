@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_reservation_invoices" model="ir.actions.act_window">
+        <field name="name">Reservation Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('reservation_id', '!=', False), ('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
+    </record>
+<record id="action_reservation_payments" model="ir.actions.act_window">
+    <field name="name">Reservation Payments</field>
+    <field name="res_model">account.payment</field>
+    <field name="view_mode">list,form</field>
+    <field name="domain">[('reservation_ids', '!=', False)]</field>
+    <field name="context">{'create': False}</field>
+</record>
+</odoo>
