@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    For Sale    -->
+    <record id="sale_module_list_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="department_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_module_view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.view.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="department_id" readonly="state in ['cancel', 'sale']"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_module_invoice_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.invoice.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="department_id" readonly="state not in ['draft']"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="sale_report_search_inherit_department" model="ir.ui.view">
+        <field name="name">sale.report.search.inherit.department</field>
+        <field name="model">sale.report</field>
+        <field name="inherit_id" ref="sale.view_order_product_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='sales_channel']" position="after">
+                <filter string="Department" name="department" context="{'group_by':'department_id'}"/>
+            </xpath>
+        </field>
+    </record>
+    <!--    For Accounting  -->
+    <!--    Adding Department to List View Table-->
+    <record id="account_view_invoice_tree_inherit" model="ir.ui.view">
+        <field name="name">account.view.invoice.tree.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_date']" position="before">
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="department_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- account.move (Journal Entry) -->
+    <record id="view_invoice_tree_inherit_record_rules_for_accounting_and_sales" model="ir.ui.view">
+        <field name="name">account.invoice.list.inherit.record_rules_for_accounting_and_sales</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+
+            <!-- Add  group to the "Pay" button -->
+            <xpath expr="//list/header/button[@name='action_force_register_payment']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="view_move_form_inherit_record_rules_for_accounting_and_sales_buttons" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.record_rules_for_accounting_and_sales.buttons</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Post or Confirm -->
+            <xpath expr="(//form/header/button[@name='action_post'])[1]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+            <xpath expr="(//form/header/button[@name='action_post'])[2]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+
+            <!-- Register Payment (only invoices / receipts) -->
+            <xpath expr="(//form/header/button[@name='action_register_payment'])[1]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+
+            <!-- Register Payment (only invoices / receipts, with outstanding payments) -->
+            <xpath expr="(//form/header/button[@name='action_register_payment'])[2]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+            <!-- Reverse -->
+            <xpath expr="//form/header/button[@name='action_view_account_move_reversal' or @name='action_reverse']"
+                   position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+
+            <!-- Cancel -->
+
+            <!-- Cancel Entry and Cancel (both use button_cancel but are conditionally shown) -->
+            <xpath expr="(//form/header/button[@name='button_cancel'])[1]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+            <xpath expr="//form/header/button[@name='button_cancel'][2]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+            <!-- Reset to Draft -->
+            <xpath expr="//form/header/button[@name='button_draft']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+            <!-- Lock -->
+            <xpath expr="//form/header/button[@name='button_hash']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+            <!-- Request Cancel -->
+            <xpath expr="//form/header/button[@name='button_request_cancel']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+
+            <!-- Set as Checked -->
+
+            <!-- Add group to "Set as Checked" button -->
+            <xpath expr="//form/header/button[@name='button_set_checked']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+
+            <!-- Invoice outstanding credits -->
+
+            <!-- 1) Tax‑lock warning -->
+            <xpath expr="//div[@class='alert alert-warning' and contains(field/@name, 'tax_lock_date_message')]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+            <!--            &lt;!&ndash; 2) Outstanding credits for Customer Invoice/Receipt &ndash;&gt;-->
+            <!--            <xpath expr="//div[contains(@class, 'alert') and contains(@class, 'alert-info') and contains(@invisible, 'move_type not in') and contains(., 'vendor')]"-->
+            <!--                   position="attributes">-->
+            <!--                <attribute name="groups">-->
+            <!--                    account.group_account_invoice,account.group_account_readonly,kyz.group_department_only-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+
+            <!--            &lt;!&ndash; 3) Outstanding debits for Vendor Invoice/Receipt &ndash;&gt;-->
+            <!--            <xpath expr="//div[contains(@class, 'alert') and contains(@class, 'alert-info') and contains(@invisible, 'move_type not in') and contains(., 'customer')]"-->
+            <!--                   position="attributes">position="replace">-->
+            <!--                <attribute name="groups">-->
+            <!--                    account.group_account_invoice,account.group_account_readonly,kyz.group_department_only-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+            <!--            &lt;!&ndash; 4) Outstanding debits for Customer Refund &ndash;&gt;-->
+            <!--            <xpath expr="//a[@class='alert-link' and normalize-space(text())='outstanding debits']/ancestor::div[contains(@invisible,'out_refund')]"-->
+            <!--                   position="attributes">-->
+            <!--                <attribute name="groups">-->
+            <!--                    account.group_account_invoice,account.group_account_readonly,kyz.group_department_only-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+            <!--            &lt;!&ndash; 5) Outstanding credits for Vendor Refund &ndash;&gt;-->
+            <!--            <xpath expr="//a[@class='alert-link' and normalize-space(text())='outstanding credits']/ancestor::div[contains(@invisible,'in_refund')]"-->
+            <!--                   position="attributes">-->
+            <!--                <attribute name="groups">-->
+            <!--                    account.group_account_invoice,account.group_account_readonly,kyz.group_department_only-->
+            <!--                </attribute>-->
+            <!--            </xpath>-->
+
+
+            <xpath expr="//div[@class='alert alert-info' and contains(@invisible,'move_type not in')][1]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+            <xpath expr="//div[@class='alert alert-info' and contains(@invisible,'move_type not in')][2]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+            <xpath expr="//div[@class='alert alert-info' and contains(@invisible,'move_type')][1]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+            <xpath expr="//div[@class='alert alert-info' and contains(@invisible,'move_type')][2]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+
+            <!--            <xpath expr="//div[contains(., 'outstanding credits') and contains(., 'listed below for this customer')]" position="attributes">-->
+            <!--                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,kyz.group_department_only</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//div[contains(., 'outstanding debits') and contains(., 'listed below for this vendor')]" position="attributes">-->
+            <!--                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,kyz.group_department_only</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//div[contains(., 'outstanding debits') and contains(., 'listed below for this customer')]" position="attributes">-->
+            <!--                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,kyz.group_department_only</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//div[contains(., 'outstanding credits') and contains(., 'listed below for this vendor')]" position="attributes">-->
+            <!--                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,kyz.group_department_only</attribute>-->
+            <!--            </xpath>-->
+
+
+            <!-- 6) Partner credit warning -->
+            <xpath expr="//div[@class='alert alert-warning' and contains(field/@name, 'tax_lock_date_message')]" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <record id="view_account_move_filter_inherit_record_rules_for_accounting_and_sales_payment_method" model="ir.ui.view">
+        <field name="name">account.move.select.inherit.record_rules_for_accounting_and_sales.payment_method</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/group/filter[@name='preferred_payment_method']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_invoice_filter_inherit_record_rules_for_accounting_and_sales_payment_method" model="ir.ui.view">
+        <field name="name">account.invoice.select.inherit.record_rules_for_accounting_and_sales.payment_method</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <!-- Target the Invoice search view’s Payment Method filter -->
+            <xpath expr="//search/group/filter[@name='preferred_payment_method_line']" position="attributes">
+                <attribute name="groups">account.group_account_invoice,account.group_account_readonly,record_rules_for_accounting_and_sales.group_department_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.server" id="action_move_switch_move_type">
+        <field name="name">Switch into invoice/credit note</field>
+
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="groups_id" eval="[(4, ref('record_rules_for_accounting_and_sales.group_department_only'))]"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="binding_view_types">form</field>
+        <field name="code">
+            if records:
+            action = records.action_switch_move_type()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="action_move_force_register_payment">
+        <field name="name">Pay</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="groups_id" eval="[(4, ref('record_rules_for_accounting_and_sales.group_department_only'))]"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="binding_view_types">form</field>
+        <field name="code">
+            if records:
+            action = records.action_force_register_payment()
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="action_move_block_payment">
+        <field name="name">(Un)Block Payment</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="groups_id" eval="[(4, ref('record_rules_for_accounting_and_sales.group_department_only'))]"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="binding_view_types">form</field>
+        <field name="code">
+            records.action_toggle_block_payment()
+        </field>
+    </record>
+
+</odoo>
