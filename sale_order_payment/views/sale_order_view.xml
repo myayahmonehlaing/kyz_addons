@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_custom_pay_button" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.custom.pay.button</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_quotation_send']" position="after">
+                    <button name="action_register_payment"
+                            string="Pay"
+                            type="object"
+                            class="oe_highlight"
+                            help="Make payment first."
+                            invisible="state not in ('sale', 'done') or invoice_status != 'to invoice'"/>
+                </xpath>
+                <!--                <xpath expr="//header" position="inside">-->
+                <!--                    <button name="open_payments"-->
+                <!--                            class="oe_stat_button"-->
+                <!--                            icon="fa-bars"-->
+                <!--                            type="object">-->
+                <!--                        <field name="payment_count" string="Payments" widget="statinfo"/>-->
+                <!--                    </button>-->
+                <!--                </xpath>-->
+                <!--                </xpath>-->
+                <!--                <xpath expr="//div[@name='button_box']" position="inside">-->
+                <!--                    <button name="open_payments"-->
+                <!--                            type="object"-->
+                <!--                            class="oe_stat_button"-->
+                <!--                            icon="fa-money"-->
+                <!--                            invisible="payment_count != 0">-->
+                <!--                        <field name="payment_count" string="Payments" widget="statinfo"/>-->
+                <!--                    </button>-->
+                <!--                </xpath>-->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_payments"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-bars"
+                            invisible="payment_count == 0">
+                        <field name="payment_count" widget="statinfo" string="Payments"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
