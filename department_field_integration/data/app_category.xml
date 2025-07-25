@@ -1,0 +1,9 @@
+<odoo>
+    <data noupdate="1">
+        <record id="custom_modules" model="ir.module.category">
+            <field name="name">Custom Modules</field>
+            <field name="description">Custom modules for changes</field>
+            <field name="sequence">15</field>
+        </record>
+    </data>
+</odoo>

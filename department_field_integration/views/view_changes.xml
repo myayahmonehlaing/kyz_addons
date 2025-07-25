@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--    For Sale    -->
+    <record id="sale_module_list_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+            <field name="department_id"/>
+        </xpath>
+        </field>
+    </record>
+
+    <record id="sale_module_view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.view.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="department_id" readonly="state in ['cancel', 'sale']"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_module_invoice_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.invoice.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="department_id" readonly="state not in ['draft']"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="sale_report_search_inherit_department" model="ir.ui.view">
+        <field name="name">sale.report.search.inherit.department</field>
+        <field name="model">sale.report</field>
+        <field name="inherit_id" ref="sale.view_order_product_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='sales_channel']" position="after">
+                <filter string="Department" name="department" context="{'group_by':'department_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+<!--    For Accounting  -->
+    <record id="account_view_invoice_tree_inherit" model="ir.ui.view">
+        <field name="name">account.view.invoice.tree.inherit</field>
+        <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_date']" position="before">
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="department_id"/>
+        </xpath>
+        </field>
+    </record>
+
+</odoo>
