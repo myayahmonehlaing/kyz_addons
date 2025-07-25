@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_sale" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sale</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id"
+               ref="sale.res_config_settings_view_form"/> <!-- This should be the original sales config form's ID if available, or base.res_config_settings_view_form -->
+        <field name="arch" type="xml">
+            <!-- Target the 'app' tag with name 'sale_management' -->
+            <xpath expr="//app[@name='sale_management']" position="inside">
+                <block title="My Custom Settings" name="my_custom_setting_container">
+                    <setting id="my_custom_setting_id"
+                             string="Sale Type Order"
+                             help="Enable or disable sale type order.">
+
+
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label string="Name" for="template_id" class="col-lg-3 o_light_label"/>
+                                <field name="template_id" options="{'no_open': False}"/>
+                            </div>
+                            <div class="row">
+                                <label string="Sequence" for="sequence_id" class="col-lg-3 o_light_label"/>
+                                <field name="sequence_id"/>
+                            </div>
+                            <div class="row">
+                                <label string="Warehouse" for="warehouse_id" class="col-lg-3 o_light_label"/>
+                                <field name="warehouse_id"/>
+                            </div>
+                            <div class="row">
+                                <label string="Journal" for="journal_id" class="col-lg-3 o_light_label"/>
+                                <field name="journal_id" domain="[('type', '=', 'sale')]"/>
+                            </div>
+                        </div>
+
+                        <div class="text-muted">
+                            Choose!
+                        </div>
+                    </setting>
+                    <setting id="my_custom_setting_id_2"
+                             help="Enable or disable Auto Invoice whenever you click confirm ROQ.">
+                            <field name="auto_invoice"/>
+                    </setting>
+
+                    <setting id="my_custom_setting_id_3"
+                             help="Enable or disable Auto Validate and Confirm Delivery whenever you click confirm ROQ." >
+                            <field name="auto_picking_done"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--    Sale Order (Quotation Form Adding Template ID)-->
+    <data>
+        <record id="sale_order_form_inherit_adding_custom" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.adding.custom</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+
+                    <field name="template_id" readonly="state not in['draft']"        domain="[('company_id', '=', company_id)]"/>
+                    <separator string="Configuration Template Info" colspan="4"/>
+
+                    <div class="alert alert-info text-muted" role="alert">
+                        <group>
+                            <field name="sequence_id"/>
+
+                            <field name="warehouse_id" readonly="True"/>
+
+                            <field name="journal_id"/>
+
+<!--                            <field name="name" readonly="True"/>-->
+                        </group>
+                    </div>
+
+                </xpath>
+                <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
