@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Add fix_discount to invoice lines in the invoice form -->
+        <record id="view_move_form_inherit_fix_discount" model="ir.ui.view">
+            <field name="name">account.move.form.inherit.fix.discount</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/list/field[@name='discount']" position="before">
+                    <field name="fix_discount" width="100px" string="Fix Discount" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/form/sheet/group/field[@name='discount']" position="before">
+                    <field name="fix_discount" width="100px" string="Fix Discount." optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+<!--         Add fix_discount to journal items list view -->
+<!--        <record id="view_move_line_tree_inherit_fix_discount" model="ir.ui.view">-->
+<!--            <field name="name">account.move.line.tree.inherit.fix.discount</field>-->
+<!--            <field name="model">account.move.line</field>-->
+<!--            <field name="inherit_id" ref="account.view_move_line_tree"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='discount']" position="before">-->
+<!--                    <field name="fix_discount" width="1000px" string="Fix Disc.%" optional="hide"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+    </data>
+</odoo>

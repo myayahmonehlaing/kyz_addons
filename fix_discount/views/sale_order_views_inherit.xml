@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_fix_discount" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.fix.discount</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='tax_id']" position="after">
+                <field              name="fix_discount"
+                                    string="Fix Discount"
+                                    groups="sale.group_discount_per_so_line"
+                                    width="100px"
+                                    optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
